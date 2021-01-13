@@ -65,9 +65,13 @@ class signup extends Component{
             adressOfOrgaStreet: this.state.adressOfOrgaStreet,
             adressOfOrgaCity: this.state.adressOfOrgaCity,
             adressOfOrgaPostalCode: this.state.adressOfOrgaPostalCode,
+            
+
+
+
         };  
         axios
-        .post('/signup', newUserData)
+        .post('/signup', JSON.stringify(newUserData))
         .then((response) => {
             localStorage.setItem('AuthToken', `${response.data.token}`);
             this.setState({ 
@@ -93,46 +97,46 @@ render(){
 
         <div className="form-group">
             <label>Email</label>
-            <input type="email" className="form-control" defaultValue={this.state.email} name="email" id="email" placeholder="email" onChange={this.handleChange}/>
+            <input type="email" className="form-control"  name="email" id="email" placeholder="email" onChange={this.handleChange}/>
         </div>
 
         <div className="form-group">
             <label>Password</label>
-            <input type="password" name="password"defaultValue={this.state.password} id="password" className="form-control" placeholder="password"onChange={this.handleChange}  />
+            <input type="password" name="password" id="password" className="form-control" placeholder="password"onChange={this.handleChange}  />
         </div>
 
         <div className="form-group">
             <label>Confirm Password</label>
-            <input type="password" name="confirmPassword" defaultValue={this.state.confirmPassword} id="confirmPassword" className="form-control" placeholder="Confirm Password" onChange={this.handleChange}/>
+            <input type="password" name="confirmPassword"  id="confirmPassword" className="form-control" placeholder="Confirm Password" onChange={this.handleChange}/>
         </div>
 
         <div className="form-group">
             <label>Username</label>
-            <input type="text" className="form-control"defaultValue={this.state.displayName} name="displayName" id="displayName" placeholder="Username" onChange={this.handleChange}/>
+            <input type="text" className="form-control" name="displayName" id="displayName" placeholder="Username" onChange={this.handleChange}/>
         </div>
         <div className="form-group">
             <label>Name</label>
-            <input type="text" className="form-control" defaultValue={this.state.name} name="name" id="name" placeholder="name" onChange={this.handleChange}/>
+            <input type="text" className="form-control"  name="name" id="name" placeholder="name" onChange={this.handleChange}/>
         </div>
         <div className="form-group">
             <label>Surname</label>
-            <input type="text" className="form-control" defaultValue={this.state.surname} name="surname" id="surname" placeholder="surname" onChange={this.handleChange}/>
+            <input type="text" className="form-control"  name="surname" id="surname" placeholder="surname" onChange={this.handleChange}/>
         </div>
         <div className="form-group">
             <label>Name of Organization</label>
-            <input type="text" className="form-control" defaultValue={this.state.nameOfOrga}name="nameOfOrga" id="nameOfOrga" placeholder="Name of Organization" onChange={this.handleChange}/>
+            <input type="text" className="form-control"name="nameOfOrga" id="nameOfOrga" placeholder="Name of Organization" onChange={this.handleChange}/>
         </div>
         <div className="form-group">
             <label>Street of the Organization</label>
-            <input type="text" className="form-control" defaultValue={this.state.adressOfOrgaStreet} name="adressOfOrgaStreet" id="adressOfOrgaStreet" placeholder="Street of Organization" onChange={this.handleChange}/>
+            <input type="text" className="form-control"  name="adressOfOrgaStreet" id="adressOfOrgaStreet" placeholder="Street of Organization" onChange={this.handleChange}/>
         </div>
         <div className="form-group">
             <label>City of the Organization</label>
-            <input type="text" className="form-control" defaultValue={this.state.adressOfOrgaCity}name="adressOfOrgaCity" id="adressOfOrgaCity" placeholder="City of Organization" onChange={this.handleChange}/>
+            <input type="text" className="form-control" name="adressOfOrgaCity" id="adressOfOrgaCity" placeholder="City of Organization" onChange={this.handleChange}/>
         </div>
         <div className="form-group">
             <label>Postalcode of the Organization</label>
-            <input type="text" className="form-control" defaultValue={this.state.adressOfOrgaPostalCode} name="adressOfOrgaPostalCode" id="adressOfOrgaCityPostalCode" placeholder="Postalcode of Organization" onChange={this.handleChange}/>
+            <input type="text" className="form-control"  name="adressOfOrgaPostalCode" id="adressOfOrgaCityPostalCode" placeholder="Postalcode of Organization" onChange={this.handleChange}/>
         </div>
 
 
