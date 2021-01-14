@@ -1,5 +1,6 @@
 import React, {Component,useState} from "react"
 import firebase from "firebase";
+import swal from 'sweetalert';
 class Resetpassword extends Component{
     constructor(props){
         super(props)
@@ -13,10 +14,9 @@ class Resetpassword extends Component{
         var emailAddress = document.querySelector('#email').value;
      
         firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
-         alert("Email versendet");
-         console.log(emailAddress);
+          swal("The Email has been sent");
         }).catch(function(error) {
-          alert(error);
+     
         });
         
 
