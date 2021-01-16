@@ -168,7 +168,7 @@ class CreateQuiz extends Component {
             type="submit"
             onClick={this.handleCreateQuestion}
           >
-            Sign Up
+            Create Question
           </button>
         </form>
       </div>
