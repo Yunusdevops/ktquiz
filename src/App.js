@@ -9,6 +9,8 @@ import home from "./Pages/home";
 import login from "./Pages/login";
 import signup from "./Pages/signup";
 import Resetpassword from "./Pages/Resetpassword";
+import CreateQuiz from "./Quiz/CreateQuiz";
+import ViewQuiz from "./Quiz/ViewQuiz";
 
 const theme = createMuiTheme({
   palette: {
@@ -39,6 +41,8 @@ class App extends Component {
                 <Route exact path="/login" component={login} />
                 <Route exact path="/signup" component={signup} />
                 <Route exact path="/Resetpassword" component={Resetpassword} />
+                <Route exact path="/CreateQuiz" component={CreateQuiz} />
+                <Route exact path="/ViewQuiz" component={ViewQuiz}/>
               </Switch>
             </div>
           </Router>

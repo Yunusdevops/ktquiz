@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebaseConfig from "../config/config";
 import { FormErrors } from "../Validation/FormError";
-import axios from "axios";
+
 import { Redirect } from "react-router-dom";
 import swal from "sweetalert";
+import axios from "axios";
 class login extends Component {
   state = { isSignedIn: false, err: "" };
+
   uiConfig = {
     signInFlow: "popup",
     signInOptions: [
@@ -29,6 +31,7 @@ class login extends Component {
       console.log("user", user);
     });
   };
+
   render() {
     return (
       <div className="login">
@@ -37,9 +40,13 @@ class login extends Component {
           {this.state.isSignedIn ? (
             <span>
               <div>Signed In!</div>
-              <button onClick={() => firebase.auth().signOut()}>
+              <Link to="/CreateQuiz">CreateQuiz</Link>
+
+              {/*  <button onClick={() => firebase.auth().signOut()}>
                 Sign out!
               </button>
+
+          */}
             </span>
           ) : (
             <StyledFirebaseAuth
@@ -47,15 +54,16 @@ class login extends Component {
               firebaseAuth={firebase.auth()}
             />
           )}
-          <p>
-            Du hast dich noch nicht registriert? Dann Klicke hier auf{" "}
-            <Link to="/signup">Signup</Link>
-          </p>
-          <p>
-            Hast du dein Passwort vergessen? Klicke hier um es zu ändern{" "}
-            <Link to="/Resetpassword">Password reset</Link>
-          </p>
         </div>
+
+        <p>
+          Du hast dich noch nicht registriert? Dann Klicke hier auf{" "}
+          <Link to="/signup">Signup</Link>
+        </p>
+        <p>
+          Hast du dein Passwort vergessen? Klicke hier um es zu ändern{" "}
+          <Link to="/Resetpassword">Password reset</Link>
+        </p>
       </div>
     );
   }

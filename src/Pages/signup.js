@@ -5,6 +5,7 @@ import { FormErrors } from "../Validation/FormError";
 import { Redirect } from "react-router-dom";
 import ReactDom from "react-dom";
 import swal from "sweetalert";
+import { useHistory } from "react-router-dom";
 import { ThreeSixtySharp, ThreeSixtyTwoTone } from "@material-ui/icons";
 class signup extends Component {
   constructor(props) {
@@ -196,15 +197,15 @@ class signup extends Component {
     };
     axios
       .post(
-        "https://europe-west1-fire-quizduell.cloudfunctions.net/api/signup",
+        "https://europe-west1-fire-quizduell.cloudfunctions.net/api/adminUser",
         newUserData
       )
       .then((response) => {
         localStorage.setItem("AuthToken", `${response.data.token}`);
 
         swal("User Created sucessfully ");
-        return <Redirect to="/login" />;
-        // this.history.push('/login'));
+        //let history = useHistory();
+        //history.push('/login');
       })
       .catch((err) => {
         var errorMessage = err.response.data.message;
