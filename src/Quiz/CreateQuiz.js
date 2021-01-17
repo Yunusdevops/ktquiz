@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import swal from "sweetalert";
 import firebase from "firebase";
+import jwtDecode from 'jwt-decode';
+
 class CreateQuiz extends Component {
   constructor(props) {
     super(props);
@@ -17,13 +19,47 @@ class CreateQuiz extends Component {
       imageUrl: "",
       videoUrl: "",
       audioUrl: "",
-      displayName: "",
+
+     
     };
   }
+
+
+ authMiddleWare = (history) => {
+    const authToken = localStorage.getItem('AuthToken');
+    if(authToken === null){
+        history.push('/login')
+    }
+}
+
+  componentWillMount = () => {
+		this.authMiddleWare(this.props.history);
+		const authToken = localStorage.getItem('AuthToken');
+    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    const mail = sessionStorage.getItem('UserEmail');
+    const username=sessionStorage.getItem('displayName');
+	axios.get("https://europe-west1-fire-quizduell.cloudfunctions.net/api/users").then((response)=>{
+ console.log(response);
+
+  }).catch((err) => {
+    var errorMessage = err.response.data.message;
+
+    swal(errorMessage);
+  });
+}
+  
   handleCreateQuestion = (event) => {
     event.preventDefault();
-    var user = firebase.auth().currentUser.displayName;
-    console.log(user);
+     
+    console.log(this.state.displayName);
+   
+
+  //var x= localStorage.getItem("AuthToken",value);
+    //var user = firebase.auth().currentUser.displayName;
+    const authToken = localStorage.getItem('AuthToken');
+    const decodetoke=jwtDecode(authToken);
+    console.log(decodetoke);
+    const username=sessionStorage.getItem('displayName');
     const newQuizData = {
       testFeld: this.state.testFeld,
       questionBody: this.state.questionBody,
@@ -34,8 +70,10 @@ class CreateQuiz extends Component {
       imageUrl: this.state.imageUrl,
       videoUrl: this.state.videoUrl,
       audioUrl: this.state.audioUrl,
-      displayName: user,
+
+     
     };
+    axios.defaults.headers.common['Authorization'] = authToken ? `Bearer ${authToken}` : '';
     axios
       .post(
         "https://europe-west1-fire-quizduell.cloudfunctions.net/api/question",

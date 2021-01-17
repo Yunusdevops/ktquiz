@@ -4,19 +4,25 @@ import { Link } from "react-router-dom";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebaseConfig from "../config/config";
 import { FormErrors } from "../Validation/FormError";
-
+import { useHistory } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 class login extends Component {
+ 
   constructor(props) {
+ 
     super(props);
     this.state = {
       email: "",
+      displayName:"",
       password:"",
+      
+      signedin:false
      
   }
   }
+  
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
@@ -27,18 +33,34 @@ class login extends Component {
 
     const newUserData = {
       email: this.state.email,
+      displayName: this.state.displayName,
       password: this.state.password,
       
     };
+  
     axios
       .post(
         "https://europe-west1-fire-quizduell.cloudfunctions.net/api/login",
         newUserData
       )
       .then((response) => {
-       // localStorage.setItem("AuthToken", `${response.data.token}`);
-
+      localStorage.setItem("AuthToken", `${response.data}`);
+      sessionStorage.setItem('UserEmail', this.state.email);
+      sessionStorage.setItem('UserPassword', this.state.password);
+      sessionStorage.setItem('displayName', this.state.password);
+     //console.log(x);
         swal("loggedin ");
+        this.props.history.push({
+          pathname: '/CreateQuiz',
+          data: response.data // your data array of objects
+        })
+        console.log(response.data);
+
+        this.setState({
+          signedin:true
+
+        })
+        
         //let history = useHistory();
         //history.push('/login');
       })
@@ -67,6 +89,9 @@ class login extends Component {
   };
 
   componentDidMount = () => {
+
+    var x=firebase.auth().currentUser;
+    console.log(x);
     firebase.auth().onAuthStateChanged((user) => {
       this.setState({ isSignedIn: !!user });
       console.log("user", user);
@@ -83,7 +108,7 @@ class login extends Component {
 
         <div style={{ textAlign: "center" }}>
         <div className="form-group">
-            <label>Please Enter the Test Field</label>
+            <label>Please Enter Email</label>
             <input
               type="email"
               defaultValue={this.state.email}
@@ -95,7 +120,20 @@ class login extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Please Enter the Question</label>
+            <label>Please Enter Username</label>
+            <input
+              type="text"
+              defaultValue={this.state.displayName}
+              onChange={this.handleChange}
+              className="form-control"
+              name="displayName"
+              id="displayName"
+              placeholder="Enter Username"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Please Enter Password</label>
             <input
               type="password"
               onChange={this.handleChange}
@@ -115,7 +153,7 @@ class login extends Component {
             Sign Up
           </button>
 
-          {this.state.isSignedIn  ? (
+          {this.state.isSignedIn || this.state.signedin  ? (
             <span>
               <div>Signed In!</div>
               <Link to="/CreateQuiz">CreateQuiz</Link>

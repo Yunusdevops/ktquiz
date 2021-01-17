@@ -5,10 +5,29 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import firebase from "firebase";
 import swal from "sweetalert";
+import axios from"axios";
 class Navbar extends Component {
   logout() {
-    firebase.auth().signOut();
-    swal("successful logged out");
+    var user = firebase.auth().currentUser;
+    console.log(user);
+    axios
+    .post(
+      "https://europe-west1-fire-quizduell.cloudfunctions.net/api/logout",user
+    )
+    .then((response) => {
+   //  localStorage.setItem("AuthToken", `${response.data.token}`);
+   
+      swal("logged-out ");
+     
+      //let history = useHistory();
+      //history.push('/login');
+    })
+    .catch((err) => {
+      var errorMessage = err.response.data.message;
+
+      swal(errorMessage);
+    });
+
   }
   render() {
     return (

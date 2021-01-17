@@ -202,7 +202,10 @@ class signup extends Component {
       )
       .then((response) => {
         localStorage.setItem("AuthToken", `${response.data.token}`);
-
+        this.props.history.push({
+          pathname: '/CreateQuiz',
+          data: response.data // your data array of objects
+        })
         swal("User Created sucessfully ");
         //let history = useHistory();
         //history.push('/login');
