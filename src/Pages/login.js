@@ -15,7 +15,7 @@ class login extends Component {
     super(props);
     this.state = {
       email: "",
-      displayName:"",
+   
       password:"",
       
       signedin:false
@@ -33,7 +33,6 @@ class login extends Component {
 
     const newUserData = {
       email: this.state.email,
-      displayName: this.state.displayName,
       password: this.state.password,
       
     };
@@ -47,7 +46,7 @@ class login extends Component {
       localStorage.setItem("AuthToken", `${response.data}`);
       sessionStorage.setItem('UserEmail', this.state.email);
       sessionStorage.setItem('UserPassword', this.state.password);
-      sessionStorage.setItem('displayName', this.state.password);
+   
      //console.log(x);
         swal("loggedin ");
         this.props.history.push({
@@ -66,7 +65,6 @@ class login extends Component {
       })
       .catch((err) => {
         var errorMessage = err.response.data.message;
-
         swal(errorMessage);
       });
   };
@@ -119,18 +117,7 @@ class login extends Component {
               placeholder="email"
             />
           </div>
-          <div className="form-group">
-            <label>Please Enter Username</label>
-            <input
-              type="text"
-              defaultValue={this.state.displayName}
-              onChange={this.handleChange}
-              className="form-control"
-              name="displayName"
-              id="displayName"
-              placeholder="Enter Username"
-            />
-          </div>
+       
 
           <div className="form-group">
             <label>Please Enter Password</label>
