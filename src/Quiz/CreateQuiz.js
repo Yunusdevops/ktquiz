@@ -5,6 +5,7 @@ import axios from "axios";
 import swal from "sweetalert";
 import firebase from "firebase";
 import jwtDecode from 'jwt-decode';
+import ImageUploader from 'react-images-upload';
 
 class CreateQuiz extends Component {
   constructor(props) {
@@ -16,36 +17,38 @@ class CreateQuiz extends Component {
       wrongAnswer1: "",
       wrongAnswer2: "",
       wrongAnswer3: "",
-      imageUrl: "",
+      imageUrl: [],
       videoUrl: "",
       audioUrl: "",
 
      
     };
+    this.onDrop = this.onDrop.bind(this);
   }
 
 
  authMiddleWare = (history) => {
     const authToken = localStorage.getItem('AuthToken');
     if(authToken === null){
+      swal("Bitte Anmelden")
         history.push('/login')
     }
 }
 
   componentWillMount = () => {
-		this.authMiddleWare(this.props.history);
+	/*	this.authMiddleWare(this.props.history);
 		const authToken = localStorage.getItem('AuthToken');
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     const mail = sessionStorage.getItem('UserEmail');
     const username=sessionStorage.getItem('displayName');
-	axios.get("https://europe-west1-fire-quizduell.cloudfunctions.net/api/users").then((response)=>{
+	axios.get("http://localhost:5001/fire-quizduell/europe-west1/api/users").then((response)=>{
  console.log(response);
 
   }).catch((err) => {
     var errorMessage = err.response.data.message;
 
     swal(errorMessage);
-  });
+  });*/
 }
   
   handleCreateQuestion = (event) => {
@@ -73,10 +76,10 @@ class CreateQuiz extends Component {
 
      
     };
-    axios.defaults.headers.common['Authorization'] = authToken ? `Bearer ${authToken}` : '';
+    axios.defaults.headers.common['Authorization'] = authToken ? `${authToken}` : '';
     axios
       .post(
-        "https://europe-west1-fire-quizduell.cloudfunctions.net/api/question",
+        "http://localhost:5001/fire-quizduell/europe-west1/api/question",
         newQuizData
       )
       .then((response) => {
@@ -95,7 +98,26 @@ class CreateQuiz extends Component {
       [event.target.name]: event.target.value,
     });
   };
+ handleImageAsFile = (e) => {
+    const image = e.target.files[0];
+    console.log(image);
+    this.setState({
+      [this.state.imageUrl]: image
+    });
+    const files = Array.from(e.target.files)
+  
 
+    const formData = new FormData()
+
+    files.forEach((file, i) => {
+      formData.append(i, file)
+    })
+}
+onDrop(picture) {
+  this.setState({
+      imageUrl: this.state.imageUrl.concat(picture),
+  });
+}
   render() {
     return (
       <div className="createQuestions">
@@ -176,17 +198,28 @@ class CreateQuiz extends Component {
           </div>
           <div className="form-group">
             <label>Choose a Image</label>
-            <input
+           {/* <input
               type="file"
-              onChange={this.handleChange}
+              name="imageUrl"
+              id="imageUrl"
+              onChange={this.handleImageAsFile}
               defaultValue={this.state.imageUrl}
               className="form-control"
+            />*/}
+            <ImageUploader
+                withIcon={true}
+                buttonText='Choose images'
+                onChange={this.onDrop}
+                imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                maxFileSize={5242880}
             />
           </div>
           <div className="form-group">
             <label>Choose a Video</label>
             <input
               type="file"
+              name="videoUrl"
+              id="videoUrl"
               onChange={this.handleChange}
               defaultValue={this.state.videoUrl}
               className="form-control"
@@ -196,6 +229,8 @@ class CreateQuiz extends Component {
             <label>Choose a Audio</label>
             <input
               type="file"
+              name="audioUrl"
+              id="audioUrl"
               onChange={this.handleChange}
               defaultValue={this.state.audioUrl}
               className="form-control"

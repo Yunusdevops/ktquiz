@@ -39,20 +39,18 @@ class login extends Component {
   
     axios
       .post(
-        "https://europe-west1-fire-quizduell.cloudfunctions.net/api/login",
+        "http://localhost:5001/fire-quizduell/europe-west1/api/login",
         newUserData
       )
       .then((response) => {
+      
       localStorage.setItem("AuthToken", `${response.data}`);
       sessionStorage.setItem('UserEmail', this.state.email);
       sessionStorage.setItem('UserPassword', this.state.password);
    
      //console.log(x);
         swal("loggedin ");
-        this.props.history.push({
-          pathname: '/CreateQuiz',
-          data: response.data // your data array of objects
-        })
+       
         console.log(response.data);
 
         this.setState({
@@ -141,16 +139,8 @@ class login extends Component {
           </button>
 
           {this.state.isSignedIn || this.state.signedin  ? (
-            <span>
-              <div>Signed In!</div>
-              <Link to="/CreateQuiz">CreateQuiz</Link>
-
-              {/*  <button onClick={() => firebase.auth().signOut()}>
-                Sign out!
-              </button>
-
-          */}
-            </span>
+        
+           window.location=("/")
           ) : (
             <StyledFirebaseAuth
               uiConfig={this.uiConfig}

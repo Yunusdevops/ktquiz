@@ -6,27 +6,61 @@ import Button from "@material-ui/core/Button";
 import firebase from "firebase";
 import swal from "sweetalert";
 import axios from"axios";
+import jwtDecode from 'jwt-decode';
+import { Redirect } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 class Navbar extends Component {
+  constructor(props) {
+ 
+    super(props);
+    this.state = {
+      
+     isAuth:false
+  }
+}
+
+componentWillMount = () =>{
+  const authToken = localStorage.getItem('AuthToken');
+  if(authToken===null){
+
+    console.log(authToken)
+   
+   console.log(this.isAuth)
+  }else{
+    this.setState({
+      isAuth:true
+    })
+  }
+}
+
+
+
+
   logout() {
-    var user = firebase.auth().currentUser;
-    console.log(user);
+    const authToken = localStorage.getItem('AuthToken');
+
+
+    axios.defaults.headers.common['Authorization'] = authToken ? `${authToken}` : '';
+
+
     axios
     .post(
-      "https://europe-west1-fire-quizduell.cloudfunctions.net/api/logout",user
+      "http://localhost:5001/fire-quizduell/europe-west1/api/logout"
     )
     .then((response) => {
-   //  localStorage.setItem("AuthToken", `${response.data.token}`);
-   
+    
+    
+      console.log(authToken);
       swal("logged-out ");
      
-      //let history = useHistory();
+      window.location="/login";
+      localStorage.removeItem('AuthToken');
+
+      //
       //history.push('/login');
     })
-    .catch((err) => {
-      var errorMessage = err.response.data.message;
-
-      swal(errorMessage);
-    });
+  
+  
 
   }
   render() {
@@ -36,13 +70,19 @@ class Navbar extends Component {
           <Button color="inherit" component={Link} to="/login">
             Login
           </Button>
-          <Button color="inherit" component={Link} to="/home">
-            Home
-          </Button>
+          {this.state.isAuth ? (
+        <Button color="inherit" component={Link} to="/">
+                        Home </Button>
+       
+
+          ):(
+            <Redirect to="/login" />
+          )}
+         
           <Button color="inherit" component={Link} to="/signup">
             Signup
           </Button>
-          <Button color="inherit" onClick={this.logout}>
+          <Button color="inherit" onClick={()=>this.logout()}>
             Sign out!
           </Button>
         </Toolbar>

@@ -11,6 +11,12 @@ import signup from "./Pages/signup";
 import Resetpassword from "./Pages/Resetpassword";
 import CreateQuiz from "./Quiz/CreateQuiz";
 import ViewQuiz from "./Quiz/ViewQuiz";
+import EditQuiz from "./Quiz/EditQuiz";
+import PlayQuiz from "./Quiz/PlayQuiz";
+import swal from "sweetalert";
+import { Redirect } from "react-router-dom";
+import Auth from "./auth/Auth";
+import ProtectedRoute from "./auth/ProtectedRoute";
 
 const theme = createMuiTheme({
   palette: {
@@ -29,23 +35,100 @@ const theme = createMuiTheme({
   },
 });
 class App extends Component {
+
+  constructor(props) {
+ 
+    super(props);
+    this.state = {
+    isAuth:false
+     
+  }
+  }
+
+  componentDidMount = () =>{
+    const authToken = localStorage.getItem('AuthToken');
+    if(authToken===null){
+
+      console.log(authToken)
+     
+     console.log(this.isAuth)
+    }else{
+      this.setState({
+        isAuth:true
+      })
+    }
+
+  }
+  authMiddleWare=(e)=> {
+    const authToken = localStorage.getItem('AuthToken');
+    if(authToken === null){
+       
+       swal("Nicht eingeloggt");
+       window.location=("/login");
+    }
+}
+  
   render() {
+
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App">
-          <Router>
+         <Router>
             <Navbar />
             <div className="container">
-              <Switch>
-                <Route exact path="/" component={home} />
-                <Route exact path="/login" component={login} />
+            
+            
+            {this.state.isAuth ? (
+           
+       
+           <Route exact  path="/"component={home} />
+            ):(
+              <Redirect to="/login" />
+
+            )}
+        {this.state.isAuth ? (
+       
+       <Route exact  path="/CreateQuiz"  component={CreateQuiz} />
+       ) : (
+         <Redirect to="/login" />
+       )}
+            {this.state.isAuth ? (
+       
+       <Route exact path="/EditQuiz"  component={EditQuiz}/>
+       ) : (
+         <Redirect to="/login" />
+       )}
+           
+           {this.state.isAuth ? (
+       
+       <Route exact  path="/ViewQuiz"  component={ViewQuiz} />
+    
+       ) : (
+         <Redirect to="/login" />
+       )}
+            {this.state.isAuth ? (
+       
+       <Route exact  path="/PlayQuiz"  component={PlayQuiz} />
+    
+       ) : (
+         <Redirect to="/login" />
+       )}
+         
+       
+           <Route exact path="/login" component={login} />
                 <Route exact path="/signup" component={signup} />
-                <Route exact path="/Resetpassword" component={Resetpassword} />
-                <Route exact path="/CreateQuiz" component={CreateQuiz} />
-                <Route exact path="/ViewQuiz" component={ViewQuiz}/>
-              </Switch>
+                <Route exact path="/Resetpassword"   component={Resetpassword} />
+
+
+       
+             
+            
+           
+                
+         
+              
             </div>
-          </Router>
+            </Router>
         </div>
       </MuiThemeProvider>
     );
