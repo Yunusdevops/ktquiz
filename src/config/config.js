@@ -12,7 +12,58 @@ var firebaseConfig ={
 };
 const fire =firebase.initializeApp(firebaseConfig);
 firebase.analytics();
-firebase.auth()
+
+export const auth = firebase.auth();
+
+export const signInWithGoogle = () => {
+  const googleProvider = new firebase.auth.GoogleAuthProvider()
+
+  const currentUser =  firebase.auth().currentUser
+      const res = currentUser
+        ?  currentUser.linkWithPopup(googleProvider)
+        : firebase.auth().signInWithPopup(googleProvider)
+
+
+      if (!currentUser) {
+        const firebaseUser = res.user
+      
+        console.log('user: ', firebaseUser)
+      } else {
+        // maybe get user through API
+      }
+}
+
+export const loginWithFacebook=() => {
+  var provider = new firebase.auth.FacebookAuthProvider();
+  firebase.auth().signInWithRedirect(provider);
+  firebase
+  .auth()
+  .getRedirectResult()
+  .then((result) => {
+    
+    var credential = result.credential;
+
+    // The signed-in user info.
+    var user = result.user;
+
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    var accessToken = credential.accessToken;
+    console.log(result);
+    // ...
+  })
+  .catch((error) => {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+
+    // ...
+  });
+ }
+
 
 export default {
   fire, 

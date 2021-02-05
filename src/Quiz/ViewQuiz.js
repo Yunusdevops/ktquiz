@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 //import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
-import DataTable from "../Components/DataTable";
+
 import swal from "sweetalert";
 import firebase from "firebase";
 import jwtDecode from 'jwt-decode';
@@ -69,10 +69,10 @@ this.setState({
 getAllQuestions(){
  
     
-   const authToken = localStorage.getItem('AuthToken');
+   const authToken = sessionStorage.getItem('AuthToken');
    axios.defaults.headers.common = { Authorization: `${authToken}` };
 
-  axios.get("http://localhost:5001/fire-quizduell/europe-west1/api/questions")
+  axios.get("https://europe-west1-fire-quizduell.cloudfunctions.net/api/questions")
   
  .then((response)=>{
 
@@ -107,18 +107,18 @@ handlePaginationChange = (e, { activePage }) => this.setState({ activePage })
   
 }
 update(entry){
-  localStorage.setItem("id", entry.id.toString());
+  sessionStorage.setItem("id", entry.id.toString());
   this.props.history.push({
     pathname: '/EditQuiz'})
 }
 delete(entry){
-  const authToken = localStorage.getItem('AuthToken');
+  const authToken = sessionStorage.getItem('AuthToken');
   const id=entry.id;
 console.log(id);
   axios.defaults.headers.common = { Authorization: `${authToken}` };
   
   
-  axios.delete("http://localhost:5001/fire-quizduell/europe-west1/api/question"+"/"+id)
+  axios.delete("https://europe-west1-fire-quizduell.cloudfunctions.net/api/question"+"/"+id)
   .then((res)=>{
     this.getAllQuestions();
     swal("Deleted Sucessfull congrats!");
@@ -157,7 +157,7 @@ console.log(id);
  return(  
 
  <div className="wrapper-users">
-     <h1 >Quiz Daten zum Thema {this.state.pageOne.testFeld} erstellt von Benutzer {this.state.pageOne.displayName}</h1>
+     <h1 >Quiz Daten erstellt von Benutzer {this.state.pageOne.displayName}</h1>
     <Item.Group  divided >
     {this.state.tableData.map((entry,key) =>(
        <Segment textAlign='center'color='yellow'>

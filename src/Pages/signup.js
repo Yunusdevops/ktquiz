@@ -165,7 +165,7 @@ class signup extends Component {
   errorClass(error) {
     return error.length === 0 ? "" : "has-error";
   }
-
+  
   componentWillReceiveProps(nextProps) {
     if (nextProps.UI.errors) {
       this.setState({
@@ -173,7 +173,7 @@ class signup extends Component {
       });
     }
   }
-
+ 
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
@@ -201,11 +201,8 @@ class signup extends Component {
         newUserData
       )
       .then((response) => {
-        localStorage.setItem("AuthToken", `${response.data.token}`);
-        this.props.history.push({
-          pathname: '/CreateQuiz',
-          data: response.data // your data array of objects
-        })
+     
+        
         swal("User Created sucessfully ");
         //let history = useHistory();
         //history.push('/login');
@@ -216,6 +213,11 @@ class signup extends Component {
         swal(errorMessage);
       });
   };
+
+
+
+  
+  
   render() {
     return (
       <div className="Signup">

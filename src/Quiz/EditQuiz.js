@@ -26,12 +26,12 @@ class EditQuiz extends Component {
       [event.target.name]: event.target.value,
     });
   };
-  componentWillMount() {
+  componentDidMount() {
    this.getQuestion();  
 }
   getQuestion(){
-    let id = localStorage.getItem("id");
-    const authToken = localStorage.getItem('AuthToken');
+    let id = sessionStorage.getItem("id");
+    const authToken = sessionStorage.getItem('AuthToken');
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios.get("https://europe-west1-fire-quizduell.cloudfunctions.net/api/question"+"/"+id)
     .then((res)=>{
@@ -81,12 +81,12 @@ const newQuizData=this.setState({
   });
        
    
-      const id=localStorage.getItem("id");
-      const authToken = localStorage.getItem('AuthToken');
+      const id=sessionStorage.getItem("id");
+      const authToken = sessionStorage.getItem('AuthToken');
       axios.defaults.headers.common['Authorization'] = authToken ? `${authToken}` : '';
       axios
       .put(
-        "http://localhost:5001/fire-quizduell/europe-west1/api/question"+"/"+id,
+        "https://europe-west1-fire-quizduell.cloudfunctions.net/api/question"+"/"+id,
         quizData
       )
       .then((response) => {

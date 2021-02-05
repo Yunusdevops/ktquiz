@@ -10,14 +10,16 @@ class Resetpassword extends Component {
   }
   resetpw() {
     var emailAddress = document.querySelector("#email").value;
-
+console.log(emailAddress);
     firebase
       .auth()
       .sendPasswordResetEmail(emailAddress)
       .then(function () {
         swal("The Email has been sent");
       })
-      .catch(function (error) {});
+      .catch(function (error) {
+        swal(error)
+      });
   }
   render() {
     return (
@@ -34,7 +36,7 @@ class Resetpassword extends Component {
           />
         </div>
 
-        <button className="btn btn-primary btn-block " onClick={this.resetpw}>
+        <button type="button" className="btn btn-primary btn-block " onClick={()=>this.resetpw()}>
           Passwort zurücksetzen
         </button>
       </form>

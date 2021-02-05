@@ -59,7 +59,7 @@ class CreateQuiz extends Component {
 
   //var x= localStorage.getItem("AuthToken",value);
     //var user = firebase.auth().currentUser.displayName;
-    const authToken = localStorage.getItem('AuthToken');
+    const authToken = sessionStorage.getItem('AuthToken');
     const decodetoke=jwtDecode(authToken);
     console.log(decodetoke);
     const username=sessionStorage.getItem('displayName');
@@ -79,7 +79,7 @@ class CreateQuiz extends Component {
     axios.defaults.headers.common['Authorization'] = authToken ? `${authToken}` : '';
     axios
       .post(
-        "http://localhost:5001/fire-quizduell/europe-west1/api/question",
+        "https://europe-west1-fire-quizduell.cloudfunctions.net/api/question",
         newQuizData
       )
       .then((response) => {

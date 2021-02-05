@@ -1,13 +1,16 @@
 import React, { Component, useState } from "react";
-import firebase from "firebase";
+
 import { Link } from "react-router-dom";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import firebaseConfig from "../config/config";
+import firebase from "firebase";
+
 import { FormErrors } from "../Validation/FormError";
 import { useHistory } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import { GithubLoginButton, GoogleLoginButton, FacebookLoginButton } from 'react-social-login-buttons'
 import swal from "sweetalert";
 import axios from "axios";
+import Grid from '@material-ui/core/Grid'
 class login extends Component {
  
   constructor(props) {
@@ -39,15 +42,15 @@ class login extends Component {
   
     axios
       .post(
-        "http://localhost:5001/fire-quizduell/europe-west1/api/login",
+        "https://europe-west1-fire-quizduell.cloudfunctions.net/api/login",
         newUserData
       )
       .then((response) => {
       
-      localStorage.setItem("AuthToken", `${response.data}`);
+      sessionStorage.setItem("AuthToken", `${response.data}`);
       sessionStorage.setItem('UserEmail', this.state.email);
       sessionStorage.setItem('UserPassword', this.state.password);
-   
+      window.location=("/")
      //console.log(x);
         swal("loggedin ");
        
@@ -70,31 +73,23 @@ class login extends Component {
 
   state = { isSignedIn: false, err: "" };
 
-  uiConfig = {
-    signInFlow: "popup",
-    signInOptions: [
-      firebase.auth.GithubAuthProvider.PROVIDER_ID,
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    ],
-    callbacks: {
-      signInSuccess: () => false,
-    },
-  };
+ 
+ 
 
   componentDidMount = () => {
+    const Authtoken=sessionStorage.getItem("AuthToken");
+    if(Authtoken!==null){
+      this.props.history.push({
+        pathname:'/'
+      });
+      // this.history.push('/login'));
 
-    var x=firebase.auth().currentUser;
-    console.log(x);
-    firebase.auth().onAuthStateChanged((user) => {
-      this.setState({ isSignedIn: !!user });
-      console.log("user", user);
-    });
+    }
+    
   };
-
+ 
   render() {
+
     return (
       <div className="login">
         <h3>Login</h3>
@@ -135,20 +130,50 @@ class login extends Component {
             type="submit"
             onClick={this.handleSubmit}
           >
-            Sign Up
+          Login
           </button>
+          <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <GithubLoginButton>
+              <span >Sign up with Github</span>
+            </GithubLoginButton>
+            
+          </Grid>
+</Grid>
+<Grid container spacing={2}>
+          <Grid item xs={12}>
+            <GoogleLoginButton 
+          >
+              <span >Sign up with Google</span>
+            </GoogleLoginButton>
+            
+          </Grid>
+</Grid>
+<Grid container spacing={2}>
+          <Grid item xs={12}> 
+            <FacebookLoginButton >
+              <span >Sign up with Facebook</span>
+            </FacebookLoginButton>
+            
+          </Grid>
+</Grid>
 
-          {this.state.isSignedIn || this.state.signedin  ? (
-        
-           window.location=("/")
+
+      { /*  {this.state.isSignedIn || this.state.signedin  ? (
+         <button onClick={() => firebase.auth().signOut()}>
+         Sign out!
+       </button>
+          
           ) : (
             <StyledFirebaseAuth
               uiConfig={this.uiConfig}
               firebaseAuth={firebase.auth()}
             />
           )}
-        </div>
-
+     
+          
+          */}
+             </div>
         <p>
           Du hast dich noch nicht registriert? Dann Klicke hier auf{" "}
           <Link to="/signup">Signup</Link>

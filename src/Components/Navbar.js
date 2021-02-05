@@ -19,8 +19,8 @@ class Navbar extends Component {
   }
 }
 
-componentWillMount = () =>{
-  const authToken = localStorage.getItem('AuthToken');
+componentDidMount = () =>{
+  const authToken = sessionStorage.getItem('AuthToken');
   if(authToken===null){
 
     console.log(authToken)
@@ -37,15 +37,15 @@ componentWillMount = () =>{
 
 
   logout() {
-    const authToken = localStorage.getItem('AuthToken');
-
+    const authToken = sessionStorage.getItem('AuthToken');
+    console.log(authToken)
 
     axios.defaults.headers.common['Authorization'] = authToken ? `${authToken}` : '';
 
 
     axios
     .post(
-      "http://localhost:5001/fire-quizduell/europe-west1/api/logout"
+      "https://europe-west1-fire-quizduell.cloudfunctions.net/api/logout"
     )
     .then((response) => {
     
@@ -54,12 +54,15 @@ componentWillMount = () =>{
       swal("logged-out ");
      
       window.location="/login";
-      localStorage.removeItem('AuthToken');
+     sessionStorage.removeItem('AuthToken');
 
       //
       //history.push('/login');
     })
-  
+    .catch((err) => {
+      var errorMessage = err.response.data.message;
+      swal(errorMessage);
+    });
   
 
   }

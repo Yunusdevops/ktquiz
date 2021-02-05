@@ -13,10 +13,9 @@ import CreateQuiz from "./Quiz/CreateQuiz";
 import ViewQuiz from "./Quiz/ViewQuiz";
 import EditQuiz from "./Quiz/EditQuiz";
 import PlayQuiz from "./Quiz/PlayQuiz";
+
 import swal from "sweetalert";
 import { Redirect } from "react-router-dom";
-import Auth from "./auth/Auth";
-import ProtectedRoute from "./auth/ProtectedRoute";
 
 const theme = createMuiTheme({
   palette: {
@@ -46,7 +45,7 @@ class App extends Component {
   }
 
   componentDidMount = () =>{
-    const authToken = localStorage.getItem('AuthToken');
+    const authToken = sessionStorage.getItem('AuthToken');
     if(authToken===null){
 
       console.log(authToken)
@@ -67,7 +66,8 @@ class App extends Component {
        window.location=("/login");
     }
 }
-  
+
+
   render() {
 
     return (
@@ -113,8 +113,7 @@ class App extends Component {
        ) : (
          <Redirect to="/login" />
        )}
-         
-       
+        
            <Route exact path="/login" component={login} />
                 <Route exact path="/signup" component={signup} />
                 <Route exact path="/Resetpassword"   component={Resetpassword} />
